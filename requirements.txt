@@ -1,0 +1,6 @@
+tensorflow
+streamlit
+ccxt
+urllib3
+plotly
+Panel
