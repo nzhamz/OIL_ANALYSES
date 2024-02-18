@@ -1,12 +1,4 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Feb 17 13:04:46 2024
-
-@author: macbook
-"""
-
-import panel as pn
+import streamlit as st
 
 def calculate_required_thickness(diameter, pressure):
     """
@@ -24,43 +16,21 @@ def calculate_required_thickness(diameter, pressure):
 
     return required_thickness
 
-def create_app():
-    """
-    Creates a Panel app with user input and thickness calculation output.
-    """
-    diameter_input = pn.widgets.FloatInput(placeholder="Diameter (inches)")
-    pressure_input = pn.widgets.FloatInput(placeholder="Pressure (psi)")
+def main():
+    st.title("Pipe Thickness Calculator")
 
-    calculate_button = pn.widgets.Button(name="Calculate")
+    diameter = st.number_input("Enter Pipe Diameter (inches):", min_value=0.1, step=0.1)
+    pressure = st.number_input("Enter Internal Pressure (psi):", min_value=0.1, step=0.1)
 
-    def calculate(event):
-        diameter = diameter_input.value
-        pressure = pressure_input.value
-
+    if st.button("Calculate"):
         if diameter <= 0 or pressure <= 0:
-            pn.alert("Error: Diameter and pressure must be positive.")
-            return
+            st.error("Error: Diameter and pressure must be positive.")
+        else:
+            try:
+                required_thickness = calculate_required_thickness(diameter, pressure)
+                st.success(f"Required Thickness: {required_thickness:.2f} inches")
+            except Exception as e:
+                st.error(f"An error occurred: {e}")
 
-        try:
-            required_thickness = calculate_required_thickness(diameter, pressure)
-            thickness_output.value = f"Required Thickness: {required_thickness:.2f} inches"
-        except Exception as e:
-            pn.alert(f"An error occurred: {e}")
-
-    calculate_button.on_click(calculate)
-
-    thickness_output = pn.widgets.TextInput(name="", value="")
-
-    layout = pn.Column(
-        diameter_input,
-        pressure_input,
-        calculate_button,
-        thickness_output,
-    )
-
-    return layout
-
-pn.extension()
-
-app = create_app()
-app.servable()  # Start the Panel app
+if __name__ == "__main__":
+    main()
