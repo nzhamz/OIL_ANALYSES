@@ -9,12 +9,15 @@ def calculate_required_thickness(diameter, pressure):
         pressure (float): Internal pressure in psi.
 
     Returns:
-        float: Required thickness in inches.
+        float: Required thickness in millimeters.
     """
     # Using a common formula for required thickness
-    required_thickness = (pressure * diameter) / (2 * 1000)  # Example formula, adjust as needed
+    required_thickness_inches = (pressure * diameter) / (2 * 1000)  # Example formula, adjust as needed
 
-    return required_thickness
+    # Convert inches to millimeters
+    required_thickness_mm = required_thickness_inches * 25.4
+
+    return required_thickness_mm
 
 def main():
     st.title("Pipe Thickness Calculator")
@@ -28,7 +31,7 @@ def main():
         else:
             try:
                 required_thickness = calculate_required_thickness(diameter, pressure)
-                st.success(f"Required Thickness: {required_thickness:.2f} inches")
+                st.success(f"Required Thickness: {required_thickness:.2f} mm")
             except Exception as e:
                 st.error(f"An error occurred: {e}")
 
